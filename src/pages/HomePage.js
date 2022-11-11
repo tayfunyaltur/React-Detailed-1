@@ -6,14 +6,22 @@ import axios from "axios";
 const HomePage = () => {
   const { username } = useContext(AppContext);
 
-  const fetchFact = () => {
-    return axios.get("https://catfact.ninja/fact").then((res) => res.data);
+  const fetchFact = async () => {
+    const { data } = await axios.get("https://catfact.ninja/fact");
+    return data;
   };
-  const { fact } = useQuery({ queryKey: ["cat"], queryFn: fetchFact() });
+
+  const { data, refetch } = useQuery({
+    queryKey: ["cat"],
+    queryFn: fetchFact,
+    enabled: false,
+  });
+
   return (
     <div>
-      <h1>{fact}</h1>
-      <h1>Hello Bro</h1>
+      <h1>{data?.fact}</h1>
+      <h1>Tayfun babadan bilgi almanator.</h1>
+      <button onClick={refetch}> Bilgi al.</button>
     </div>
   );
 };
